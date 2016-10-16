@@ -31,9 +31,9 @@ class MoviesController < ApplicationController
     end
     
     if params[:sort_type] != session[:sort_type] or params[:ratings] != session[:ratings]
-      session[:sort_type] = sort_type
-      session[:ratings] = @checked_ratings
-      redirect_to :sort => sort_type, :ratings => @checked_ratings and return
+      session[:sort_type] = params[:sort_type]
+      session[:ratings] = params[:ratings]
+      redirect_to :sort_type => sort_type, :ratings => @checked_ratings and return
     end
     
     @movies =  Movie.order(sort_type).where('rating IN (?)', initial_rating.keys).all
