@@ -1,5 +1,6 @@
 class MoviesController < ApplicationController
 
+
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
@@ -12,8 +13,18 @@ class MoviesController < ApplicationController
 
   def index
     sort_type = params[:sort_type]
-    @movies = Movie.order(sort_type).all
+    
     @all_ratings =  ['G','PG','PG-13','R','NC-17']
+    
+    origin_rating =  {'G' => 1,'PG' => 1,'PG-13' => 1,'R'=>1,'NC-17'=>1}
+    
+    if(params[:ratings].nil?)
+      @movies = Movie.order(sort_type).all  
+    else
+      origin_rating = params[:ratings]
+      @movies =  Movie.order(sort_type).where('rating IN (?)', origin_rating.keys).all
+    end
+    
   end
 
   def new
@@ -22,7 +33,8 @@ class MoviesController < ApplicationController
 
   def create
     @movie = Movie.create!(movie_params)
-    flash[:notice] = "#{@movie.title} was successfully created."
+    flash[:notice] = "#{@movie.ti
+    origin_rating = tle} was successfully created."
     redirect_to movies_path
   end
 
