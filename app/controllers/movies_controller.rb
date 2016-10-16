@@ -11,7 +11,9 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    sort_type = params[:sort_type]
+    @movies = Movie.order(sort_type).all
+    @all_ratings =  ['G','PG','PG-13','R','NC-17']
   end
 
   def new
